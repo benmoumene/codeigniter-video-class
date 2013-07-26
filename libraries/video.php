@@ -1,20 +1,24 @@
 <?php
 
-if (defined('BASEPATH'))
+if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
 /**
- * Video Class
+ * CodeIgniter Video Class
  *
  * Various functions on popular video hosting platforms
  *
+ * @package        	CodeIgniter
+ * @subpackage    	Libraries
+ * @category    	Libraries
  * @author        	Nicolas Delhaume
- * @created		      26/07/2013
- * @license         http://nicolasdelhaume.com
- * @link            n/a
+ * @created		26/07/2013
+ * @license             http://nicolasdelhaume.com
+ * @link                n/a
  */
-class Video {
+class Media {
 
+    
     /**
      * @var  string  the provider of the video [youtube,videmo,dailymotion]
      */
@@ -51,14 +55,28 @@ class Video {
     protected $autoplay = FALSE;
 
     /**
-     * Create the class with minimum options
+     * Overloads default class properties from the options.
      *
-     * At least two options are mandatory: provider and videoID
+     * Any of the provider options can be set here, such as app_id or secret.
      *
      * @param   array $options provider options
      * @throws  Exception if a required option is not provided
      */
-    function __construct(array $options = array()) {
+    function __construct() {
+
+        $this->obj = & get_instance();
+    }
+
+    /**
+     * Initialise the object with provided params.
+     *
+     * Any of the object options can be set here, such as provider or videoID.
+     * Options also available are: height, width, autoplay
+     *
+     * @param   array $options Options for the object
+     * @throws  Exception if a the provider is not in the available list
+     */
+    function init($options = array()) {
 
         if (empty($options['provider'])) {
             throw new Exception('Required option not provided: provider');
@@ -71,27 +89,13 @@ class Video {
         if (!in_array($options['provider'], $this->available_providers)) {
             throw new Exception('The video provider you had set is not available');
         }
-
-        $this->init($options);
-    }
-
-    /**
-     * Initialise the object with provided params.
-     *
-     * Any of the object options can be set here, such as provider or videoID.
-     * Options also available are: height, width, autoplay
-     *
-     * @param   array $options Options for the object
-     * @throws  Exception if a the provider is not in the available list
-     */
-    function init(array $options = array()) {
-
+       
         isset($options['provider']) and $this->provider = $options['provider'];
         isset($options['videoID']) and $this->videoID = $options['videoID'];
         isset($options['width']) and $this->width = $options['width'];
         isset($options['height']) and $this->height = $options['height'];
         isset($options['autoplay']) and $this->autoplay = $options['autoplay'];
-        isset($options['thumb_hq']) and $this->autoplay = $options['thumb_hq'];
+        isset($options['hqthumb']) and $this->autoplay = $options['hqthumb'];
     }
 
     /**
@@ -122,7 +126,7 @@ class Video {
      * @throws  Exception if a the provider is not in the available list
      */
     function embed() {
-
+        
         $params = array($this->videoID,
             'embed',
             $this->width,
@@ -152,11 +156,15 @@ class Video {
         $convert = json_decode($site);
         $thumbs = $convert->thumbnail_url;
 
+
         if ($return == 'embed') {
             return '<iframe src="http://www.dailymotion.com/embed/video/' . $id . '" width="' . ($width ? $width : 560) . '" height="' . ($height ? $height : 349) . '" frameborder="0"></iframe>';
-        } else if ($return == 'thumb' || $return == 'hqthumb') {
+        }
+        else if ($return == 'thumb' || $return == 'hqthumb') {
             return $thumbs;
-        } else {
+        }
+        // else return id
+        else {
             return $id;
         }
     }
@@ -170,15 +178,21 @@ class Video {
      * @param $rel > default cigenerate
      */
     private function get_youtube($id, $return = 'embed', $width = '', $height = '', $rel = "cigenerate") {
-
+        //return embed iframe
         if ($return == 'embed') {
             $r = "<iframe src='http://www.youtube.com/embed/$id?rel=$rel' frameborder='0' width='" . ($width ? $width : 560) . "' height='" . ($height ? $height : 349) . "'></iframe>";
             return $r;
-        } else if ($return == 'thumb') {
+        }
+        //return normal thumb
+        else if ($return == 'thumb') {
             return 'http://i1.ytimg.com/vi/' . $id . '/default.jpg';
-        } else if ($return == 'hqthumb') {
+        }
+        //return hqthumb
+        else if ($return == 'hqthumb') {
             return 'http://i1.ytimg.com/vi/' . $id . '/hqdefault.jpg';
-        } else {
+        }
+        // else return id
+        else {
             return $id;
         }
     }
@@ -199,9 +213,13 @@ class Video {
         if ($return == 'embed') {
             $e = '<iframe src="http://player.vimeo.com/video/' . $id . '" width="' . ($width ? $width : 560) . '" height="' . ($height ? $height : 349) . '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
             return $e;
-        } else if ($return == 'thumb' || $return == 'hqthumb') {
+        }
+        //return normal thumb
+        else if ($return == 'thumb' || $return == 'hqthumb') {
             return $thumbs;
-        } else {
+        }
+        // else return id
+        else {
             return $url;
         }
     }
