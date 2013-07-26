@@ -11,11 +11,15 @@ The class can also retrieve the video thumb for you.
 ## Easy to use ##
 This is a basic example of usage 
 
-autoload the library in you config/autoload.php file or load it liek that  
+autoload the library in you config/autoload.php file 
 ```PHP 
-$this->load->helper('url_helper');
+$autoload['libraries'] = array('video');
 ```
-then, just configure your object (in your view for example), like this:
+or load it like this:  
+```PHP 
+$this->load->helper('video');
+```
+then, just configure your object (in your view for example), like that:
 ```PHP 
 $params = array('provider' => 'vimeo', 'videoID' => '38527548');
 
