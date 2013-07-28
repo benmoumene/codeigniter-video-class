@@ -26,7 +26,7 @@ $params = array('provider' => 'vimeo', 'videoID' => '38527548');
 // init the object with options
 $this->video->init($params);
 
-// get the thumb URL
+// get the thumb image URL
 echo $this->video->thumb();
 
 // get the embed code for the video
