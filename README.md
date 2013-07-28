@@ -24,13 +24,13 @@ then, just configure your object (in your view for example), like that:
 $params = array('provider' => 'vimeo', 'videoID' => '38527548');
 
 // init the object with options
-$this->media->init($params);
+$this->video->init($params);
 
 // get the thumb URL
-echo $this->media->thumb();
+echo $this->video->thumb();
 
 // get the embed code for the video
-echo $this->media->embed();
+echo $this->video->embed();
 ```
 
 
