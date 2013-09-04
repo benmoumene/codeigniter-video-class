@@ -95,7 +95,7 @@ class Video {
         isset($options['width']) and $this->width = $options['width'];
         isset($options['height']) and $this->height = $options['height'];
         isset($options['autoplay']) and $this->autoplay = $options['autoplay'];
-        isset($options['hqthumb']) and $this->autoplay = $options['hqthumb'];
+        isset($options['hqthumb']) and $this->hqthumb = $options['hqthumb'];
     }
 
     /**
